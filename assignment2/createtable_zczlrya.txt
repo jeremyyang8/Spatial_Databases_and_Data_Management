@@ -1,0 +1,62 @@
+drop schema if exists zczlrya cascade;
+create schema zczlrya;
+
+
+drop table if exists zczlrya.bus_station;
+create table zczlrya.bus_station(
+	bus_station_id serial not null,
+	last_repainted date not null,
+	name character varying (200) not null);
+
+alter table zczlrya.bus_station drop column if exists location;
+select AddGeometryColumn('zczlrya','bus_station','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.cleaners;
+create table zczlrya.cleaners(
+	cleaner_id serial not null,
+	cleaner_name character varying (200) not null,
+	cleaner_surname character varying (200) not null,
+	date_of_birth date not null,
+	contact_number character varying (200) not null,
+	cost_per_hour double precision not null);
+
+
+drop table if exists zczlrya.waiting_room;
+create table zczlrya.waiting_room(
+	waiting_room_id serial not null,
+	bus_station_id integer not null,
+	opening_time double precision not null,
+	closing_time double precision not null);
+
+alter table zczlrya.waiting_room drop column if exists location;
+select AddGeometryColumn('zczlrya','waiting_room','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.bus_station_cleaner;
+create table zczlrya.bus_station_cleaner(
+	bus_station_id integer not null,
+	cleaner_id integer not null,
+	bus_station_cleaner_id serial not null,
+	hours_per_week double precision not null);
+
+
+drop table if exists zczlrya.air_quality_sensors;
+create table zczlrya.air_quality_sensors(
+	sensor_make character varying (200) not null,
+	sensor_installation_date integer not null,
+	sensor_id serial not null,
+	waiting_room_id integer not null);
+
+alter table zczlrya.air_quality_sensors drop column if exists location;
+select AddGeometryColumn('zczlrya','air_quality_sensors','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.air_quality_values;
+create table zczlrya.air_quality_values(
+	air_quality_id serial not null,
+	sensor_id integer not null,
+	total_voc double precision not null,
+	reading_timestamp date not null,
+	temperature double precision not null,
+	humidity double precision not null);

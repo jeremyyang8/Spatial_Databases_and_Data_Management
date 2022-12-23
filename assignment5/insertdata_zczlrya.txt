@@ -1,0 +1,203 @@
+/* the stadium table */
+	insert into zczlrya.stadiums
+	(schedule, match_date, ticket_price, name, location)
+	values
+	('Arsenal VS Southanmpton', '2020-12-26', 45, 'Shenley', st_geomfromtext('POLYGON((530930 185790,531100 185790,531100 185600,530930 185600,530930 185790))', 27700));
+
+/* the stadium table */
+	insert into zczlrya.stadiums
+	(schedule, match_date, ticket_price, name, location)
+	values
+	('Arsenal VS Liverpool', '2021-01-30', 90, 'Emirates', st_geomfromtext('POLYGON((531135 185820,531335 185820,531335 185600,531135 185600,531135 185820))', 27700));
+
+/* the stadium table */
+	insert into zczlrya.stadiums
+	(schedule, match_date, ticket_price, name, location)
+	values
+	('Arsenal VS Manchester United', '2021-04-03', 75, 'Highbury', st_geomfromtext('POLYGON((531370 185790,531540 185790,531540 185600,531370 185600,531370 185790))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Emirates'), 96.8, 'Emirates West', st_geomfromtext('POLYGON((531135 185790,531165 185790,531165 185630,531135 185630,531135 185790))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Emirates'), 89.7, 'Emirates East', st_geomfromtext('POLYGON((531335 185790,531335 185630,531305 185630,531305 185790,531335 185790))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Emirates'), 84.6, 'Emirates North', st_geomfromtext('POLYGON((531165 185820,531305 185820,531305 185790,531165 185790,531165 185820))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Emirates'), 85.3, 'Emirates South', st_geomfromtext('POLYGON((531165 185630,531305 185630,531305 185600,531165 185600,531165 185630))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Shenley'), 86.6, 'Shenley East', st_geomfromtext('POLYGON((531070 185760,531100 185760,531100 185630,531070 185630,531070 185760))', 27700));
+
+/* the bleachers table */
+	insert into zczlrya.bleachers
+	(stadium_id, attendence_rate, orientation, location)
+	values
+	((select stadium_id from zczlrya.stadiums where name = 'Highbury'), 95.1, 'Highbury West', st_geomfromtext('POLYGON((531370 185760,531400 185760,531400 185630,531370 185630,531370 185760))', 27700));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531165 185710)',27700),4, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531165 185710)',27700)))));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531305 185710)',27700),5, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531305 185710)',27700)))));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531235 185790)',27700),4, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531235 185790)',27700)))));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531235 185630)',27700),3, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531235 185630)',27700)))));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531070 185695)',27700),4, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531070 185695)',27700)))));
+
+/* the vip_rooms table */
+	insert into zczlrya.vip_rooms
+	(location, vip_room_rating, bleacher_id)
+	values
+	(st_geomfromtext('POINT(531400 185695)',27700),5, (select bleacher_id from zczlrya.bleachers where st_intersects(bleachers.location, (st_geomfromtext('POINT(531400 185695)',27700)))));
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531135 185790,531165 185790,531165 185630,531135 185630,531135 185790))',27700)), 'serviceable', 'need to be maintained', '2021-01-10');
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531335 185790,531335 185630,531305 185630,531305 185790,531335 185790))',27700)), 'serviceable', 'need to be maintained', '2021-01-03');
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531165 185820,531305 185820,531305 185790,531165 185790,531165 185820))',27700)), 'serviceable', 'serviceable', '2020-12-27');
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531165 185630,531305 185630,531305 185600,531165 185600,531165 185630))',27700)), 'serviceable', 'serviceable', '2020-12-20');
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531070 185760,531100 185760,531100 185630,531070 185630,531070 185760))',27700)), 'serviceable', 'serviceable', '2020-12-13');
+
+/* the bleacher_check table */
+	insert into zczlrya.bleacher_check
+	(bleacher_id, seat_check, protective_fence_check, report_date)
+	values
+	((select bleacher_id from zczlrya.bleachers where location = st_geomfromtext('POLYGON((531370 185760,531400 185760,531400 185630,531370 185630,531370 185760))',27700)), 'serviceable', 'serviceable', '2020-12-06');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('Jeremy', 'Yang', '1987-11-17');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('Jason', 'Song', '1979-04-20');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('Jeffery', 'Sun', '1989-12-23');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('George', 'Zeng', '1988-03-07');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('Xabi', 'Alonso', '1983-05-05');
+
+/* the keepers table */
+	insert into zczlrya.keepers
+	(keeper_forename, keeper_surname, date_of_birth)
+	values
+	('Leo', 'Messi', '1987-06-06');
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531165 185710)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'Jeremy'
+	and keeper_surname = 'Yang' and date_of_birth = '1987-11-17'), 32000);
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531305 185710)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'Jason'
+	and keeper_surname = 'Song' and date_of_birth = '1979-04-20'), 31000);
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531235 185790)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'Jeffery'
+	and keeper_surname = 'Sun' and date_of_birth = '1989-12-23'), 30000);
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531235 185630)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'George'
+	and keeper_surname = 'Zeng' and date_of_birth = '1988-03-07'), 30000);
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531070 185695)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'Xabi'
+	and keeper_surname = 'Alonso' and date_of_birth = '1983-05-05'), 30000);
+
+/* the vip_room_keeper table */
+	insert into zczlrya.vip_room_keeper
+	(vip_room_id, keeper_id, salary_per_season)
+	values
+	((select vip_room_id from zczlrya.vip_rooms where location = st_geomfromtext('POINT(531400 185695)',27700)), (select keeper_id from zczlrya.keepers where keeper_forename = 'Leo'
+	and keeper_surname = 'Messi' and date_of_birth = '1987-06-06'), 32000);

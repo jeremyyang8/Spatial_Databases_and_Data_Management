@@ -1,0 +1,4 @@
+
+select distinct on (value_degrees_c) value_degrees_c, reading_timestamp from
+ucfscde.temperature_values where value_degrees_c < 25 order by
+value_degrees_c, reading_timestamp desc;

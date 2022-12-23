@@ -1,0 +1,72 @@
+1.
+select *
+from ucfscde.temperature_sensors
+where sensor_id in(
+select temperature_sensor_id
+from ucfscde.temperature_values
+where value_degrees_c=(
+select max(value_degrees_c) from ucfscde.temperature_values
+where reading_timestamp>(select date_trunc('day', now() - interval '6 months'))));
+
+2.*
+with
+worst_roof_condition as (select max(roof_condition) as worst_condition from ucfscde.building_condition where roof_condition < 5),
+buildings_id_worst_roof as (select building_id from ucfscde.building_condition where roof_condition = (select worst_condition from worst_roof_condition))
+select * from ucfscde.buildings where building_id in (select building_id from buildings_id_worst_roof);
+
+3.
+select a.sensor_id, a.sensor_make, b.room_id, b.room_number, b.room_use, st_3ddistance(a.location, b.location) as distance_3d
+from ucfscde.temperature_sensors a, ucfscde.rooms b;
+
+4.
+select a.*, b.*
+from ucfscde.buildings a inner join ucfscde.criticality b
+on a.criticality_id = b.criticality_id;
+
+5.
+WITH 
+latest_condition_report as (select distinct on (building_id) building_id, roof_condition, opaque_facade_condition, transparent_facade_condition, doors_gates_condition, elevators_condition, stairs_condition, disabled_access_condition, report_date, user_id from ucfscde.building_condition
+order by building_id,report_date desc)
+SELECT a.*, b.* from ucfscde.buildings a LEFT JOIN latest_condition_report b on a.building_id=b.building_id;
+6.
+select a.*, b.*
+from ucfscde.criticality a FULL OUTER JOIN ucfscde.windows b
+on a.criticality_id = b.criticality;
+
+7.
+select a.*, b.*
+from ucfscde.rooms a inner join ucfscde.buildings b
+on st_3dintersects(a.location, b.location);
+
+8.
+with latest_roof_condition as
+(select distinct on (building_id) building_id, roof_condition, report_date, user_id
+from ucfscde.building_condition order by building_id, report_date desc),
+latest_roof_condition_text as (select a.*,b.asset_health_indicator_description from latest_roof_condition a inner join ucfscde.asset_health_indicator b on a.roof_condition=b.asset_health_indicator_id),
+building_roof_condition as (select c.*,d.asset_health_indicator_description,d.report_date,d.user_id from ucfscde.buildings c left join latest_roof_condition_text d on c.building_id=d.building_id)
+select  e.*,f.* from building_roof_condition e inner join ucfscde.criticality f on e.criticality=f.criticality_id;
+
+
+WITH sensors_within_university as (select distinct on(temperature_sensor_id) temperature_sensor_id, value_degrees_c, reading_timestamp )  
+SELECT a.*, b.* from ucfscde.buildings a LEFT JOIN latest_condition_report b on a.building_id=b.building_id;
+
+
+
+
+
+with 
+sensors_within_university as (select a.university_name, b.sensor_id, b.sensor_name, b.sensor_make, b.sensor_installation_date, b.location as sensor_location from ucfscde.university a inner join ucfscde.temperature_sensors b on st_contains(a.location, b.location)), 
+sensor_readings_6_months as (select distinct on(temperature_sensor_id)temperature_sensor_id, value_degrees_c, reading_timestamp from ucfscde.temperature_values where reading_timestamp > (select date_trunc('day', NOW() - interval '6 months')) order by temperature_sensor_id, reading_timestamp) 
+select c.*, d.* from sensors_within_university c left join sensor_readings_6_months d on c.sensor_id = d. temperature_sensor_id;
+
+
+
+
+
+
+
+
+with
+sensors_within_university as (select a.university_name, b.sensor_id, b.sensor_name, b.sensor_make, b.sensor_installation_date, b.location as sensor_location from ucfscde.university a inner join ucfscde.temperature_sensors b on st_contains(a.location, b.location)), 
+sensor_readings_6_months as (select distinct on(temperature_sensor_id)temperature_sensor_id, value_degrees_c, reading_timestamp from ucfscde.temperature_values where reading_timestamp > (select date_trunc('day', NOW() - interval '6 months')) order by temperature_sensor_id, reading_timestamp) 
+select c.*, d.* from sensors_within_university c left join sensor_readings_6_months d on c.sensor_id = d.temperature_sensor_id;

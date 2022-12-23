@@ -1,0 +1,104 @@
+/*Primary Keys */
+
+/*the stadiums table */
+	alter table zczlrya.stadiums add constraint
+	stadiums_pk primary key (stadium_id);
+
+/*the keepers table */
+	alter table zczlrya.keepers add constraint
+	keepers_pk primary key (keeper_id);
+
+/*the bleachers table */
+	alter table zczlrya.bleachers add constraint
+	bleachers_pk primary key (bleacher_id);
+
+/*the vip_room_keeper table */
+	alter table zczlrya.vip_room_keeper add constraint
+	vip_room_keeper_pk primary key (vip_room_keeper_id);
+
+/*the vip_rooms table */
+	alter table zczlrya.vip_rooms add constraint
+	vip_rooms_pk primary key (vip_room_id);
+
+/*the bleacher_check table */
+	alter table zczlrya.bleacher_check add constraint
+	bleacher_check_pk primary key (bleacher_check_id);
+
+
+/* Foreign Keys */
+
+/* the bleachers table */
+	alter table zczlrya.bleachers add constraint 
+	bleachers_stadiums_fk foreign key(stadium_id)
+	references zczlrya.stadiums(stadium_id);
+
+/* the vip_room_keeper table */
+	alter table zczlrya.vip_room_keeper add constraint 
+	vip_room_keeper_keepers_fk foreign key(keeper_id)
+	references zczlrya.keepers(keeper_id);
+
+/* the vip_room_keeper table */
+	alter table zczlrya.vip_room_keeper add constraint 
+	vip_room_keeper_vip_rooms_fk foreign key(vip_room_id)
+	references zczlrya.vip_rooms(vip_room_id);
+
+/* the vip_rooms table */
+	alter table zczlrya.vip_rooms add constraint 
+	vip_rooms_bleachers_fk foreign key(bleacher_id)
+	references zczlrya.bleachers(bleacher_id);
+
+/* the bleacher_check table */
+	alter table zczlrya.bleacher_check add constraint 
+	bleacher_check_bleachers_fk foreign key(bleacher_id)
+	references zczlrya.bleachers(bleacher_id);
+
+
+/* Unique Constraints */
+
+/* the stadiums table */
+	alter table zczlrya.stadiums
+	add constraint stadiums_unique
+	unique(location);
+
+/* the keepers table */
+	alter table zczlrya.keepers
+	add constraint keepers_unique
+	unique(keeper_forename, keeper_surname, date_of_birth);
+
+/* the bleachers table */
+	alter table zczlrya.bleachers
+	add constraint bleachers_unique
+	unique(location);
+
+/* the vip_room_keeper table */
+	alter table zczlrya.vip_room_keeper
+	add constraint vip_room_keeper_unique
+	unique(keeper_id, vip_room_id);
+
+/* the vip_rooms table */
+	alter table zczlrya.vip_rooms
+	add constraint vip_rooms_unique
+	unique(location);
+
+/* the bleacher_check table */
+	alter table zczlrya.bleacher_check
+	add constraint bleacher_check_unique
+	unique(report_date, bleacher_id);
+
+
+/* Check Constraints */
+
+/* the bleacher_check table */
+	alter table zczlrya.bleacher_check
+	add constraint seat_check_check
+	check (seat_check in ('serviceable','need to be maintained'));
+
+/* the bleacher_check table */
+	alter table zczlrya.bleacher_check
+	add constraint protective_fence_check_check
+	check (protective_fence_check in ('serviceable','need to be maintained'));
+
+/* the vip_rooms table */
+	alter table zczlrya.vip_rooms
+	add constraint vip_room_rating_check
+	check (vip_room_rating < 6);

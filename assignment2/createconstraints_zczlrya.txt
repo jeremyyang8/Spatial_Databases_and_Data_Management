@@ -1,0 +1,99 @@
+/*Primary Keys */
+
+/*the bus_station table */
+	alter table zczlrya.bus_station add constraint
+	bus_station_pk primary key (bus_station_id);
+
+/*the cleaners table */
+	alter table zczlrya.cleaners add constraint
+	cleaners_pk primary key (cleaner_id);
+
+/*the waiting_room table */
+	alter table zczlrya.waiting_room add constraint
+	waiting_room_pk primary key (waiting_room_id);
+
+/*the bus_station_cleaner table */
+	alter table zczlrya.bus_station_cleaner add constraint
+	bus_station_cleaner_pk primary key (bus_station_cleaner_id);
+
+/*the air_quality_sensors table */
+	alter table zczlrya.air_quality_sensors add constraint
+	air_quality_sensors_pk primary key (sensor_id);
+
+/*the air_quality_values table */
+	alter table zczlrya.air_quality_values add constraint
+	air_quality_values_pk primary key (air_quality_id);
+
+
+/* Foreign Keys */
+
+/* the waiting_room table */
+	alter table zczlrya.waiting_room add constraint 
+	waiting_room_bus_station_fk foreign key(bus_station_id)
+	references zczlrya.bus_station(bus_station_id);
+
+/* the bus_station_cleaner table */
+	alter table zczlrya.bus_station_cleaner add constraint 
+	bus_station_cleaner_bus_station_fk foreign key(bus_station_id)
+	references zczlrya.bus_station(bus_station_id);
+
+/* the bus_station_cleaner table */
+	alter table zczlrya.bus_station_cleaner add constraint 
+	bus_station_cleaner_cleaners_fk foreign key(cleaner_id)
+	references zczlrya.cleaners(cleaner_id);
+
+/* the air_quality_sensors table */
+	alter table zczlrya.air_quality_sensors add constraint 
+	air_quality_sensors_waiting_room_fk foreign key(waiting_room_id)
+	references zczlrya.waiting_room(waiting_room_id);
+
+/* the air_quality_values table */
+	alter table zczlrya.air_quality_values add constraint 
+	air_quality_values_air_quality_sensors_fk foreign key(sensor_id)
+	references zczlrya.air_quality_sensors(sensor_id);
+
+
+/* Unique Constraints */
+
+/* the bus_station table */
+	alter table zczlrya.bus_station
+	add constraint bus_station_unique
+	unique(location);
+
+/* the cleaners table */
+	alter table zczlrya.cleaners
+	add constraint cleaners_unique
+	unique(cleaner_name, cleaner_surname, date_of_birth);
+
+/* the waiting_room table */
+	alter table zczlrya.waiting_room
+	add constraint waiting_room_unique
+	unique(location);
+
+/* the bus_station_cleaner table */
+	alter table zczlrya.bus_station_cleaner
+	add constraint bus_station_cleaner_unique
+	unique(bus_station_id, cleaner_id);
+
+/* the air_quality_sensors table */
+	alter table zczlrya.air_quality_sensors
+	add constraint air_quality_sensors_unique
+	unique(location);
+
+/* the air_quality_values table */
+	alter table zczlrya.air_quality_values
+	add constraint air_quality_values_unique
+	unique(reading_timestamp, sensor_id);
+
+
+/* Check Constraints */
+
+/* the bus_station_cleaner table */
+	alter table zczlrya.bus_station_cleaner
+	add constraint hours_per_week_check
+	check (hours_per_week < 49);
+
+
+
+
+

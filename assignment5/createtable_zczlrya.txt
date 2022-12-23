@@ -1,0 +1,60 @@
+drop schema if exists zczlrya cascade;
+create schema zczlrya;
+
+
+drop table if exists zczlrya.stadiums;
+create table zczlrya.stadiums(
+	stadium_id serial not null,
+	name character varying (200) not null,
+	schedule character varying (200) not null,
+	match_date date not null,
+	ticket_price double precision not null);
+
+alter table zczlrya.stadiums drop column if exists location;
+select AddGeometryColumn('zczlrya','stadiums','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.keepers;
+create table zczlrya.keepers(
+	keeper_id serial not null,
+	keeper_forename character varying (200) not null,
+	keeper_surname character varying (200) not null,
+	date_of_birth date not null);
+
+
+drop table if exists zczlrya.bleachers;
+create table zczlrya.bleachers(
+	bleacher_id serial not null,
+	stadium_id integer not null,
+	attendence_rate double precision not null,
+	orientation character varying (200) not null);
+
+alter table zczlrya.bleachers drop column if exists location;
+select AddGeometryColumn('zczlrya','bleachers','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.vip_room_keeper;
+create table zczlrya.vip_room_keeper(
+	vip_room_keeper_id serial not null,
+	keeper_id integer not null,
+	vip_room_id integer not null,
+	salary_per_season double precision not null);
+
+
+drop table if exists zczlrya.vip_rooms;
+create table zczlrya.vip_rooms(
+	vip_room_id serial not null,
+	bleacher_id integer not null,
+	vip_room_rating integer not null);
+
+alter table zczlrya.vip_rooms drop column if exists location;
+select AddGeometryColumn('zczlrya','vip_rooms','location',27700,'geometry',2);
+
+
+drop table if exists zczlrya.bleacher_check;
+create table zczlrya.bleacher_check(
+	bleacher_check_id serial not null,
+	bleacher_id integer not null,
+	seat_check character varying (200) not null,
+	protective_fence_check character varying (200) not null,
+	report_date date not null);
